@@ -2,14 +2,27 @@
   <div>
     <Legend class="mb-2" />
 
-    <div class="control-panel-wrapper flex-column flex-centered" id="disadvantageControlPanel">
+    <div
+      class="control-panel-wrapper flex-column flex-centered"
+      id="disadvantageControlPanel"
+    >
       <div class="control-panel flex-centered" ref="layerToggle">
         <!-- Toggles -->
         <div class="toggle-wrapper sflex-centered">
-          <label class="control-panel-label font-weight-bold mr-3">Overlay</label>
+          <label class="control-panel-label font-weight-bold mr-3"
+            >Overlay</label
+          >
           <template v-for="(layer, i) in toggleLayers">
-            <div class="pretty p-default p-round layer-input" v-if="showLayer(layer.name)" :key="i">
-              <input type="checkbox" v-model="layer.active" @change="toggleLayer(i, layer.active)" />
+            <div
+              class="pretty p-default p-round layer-input"
+              v-if="showLayer(layer.name)"
+              :key="i"
+            >
+              <input
+                type="checkbox"
+                v-model="layer.active"
+                @change="toggleLayer(i, layer.active)"
+              />
               <div class="state">
                 <label :style="{ color: '#2c3e50' }">{{ layer.name }}</label>
               </div>
@@ -45,7 +58,7 @@ export default {
     LMap,
     LGeoJson,
     LTileLayer,
-    Legend
+    Legend,
   },
   data() {
     return {
@@ -53,7 +66,7 @@ export default {
       zoom: 11,
       bounds: [
         [39.86747186, -75.28030675],
-        [40.13793484, -74.95574856]
+        [40.13793484, -74.95574856],
       ],
       url:
         "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png",
@@ -62,7 +75,7 @@ export default {
       layers: {},
       toggleLayers: {
         homicides: { active: false, name: "2019 Homicides" },
-        redlining: { active: false, name: "HOLC Boundaries" }
+        redlining: { active: false, name: "HOLC Boundaries" },
       },
       isLoading: true,
       homeBounds: null,
@@ -72,15 +85,15 @@ export default {
         B: 'B: "Still Desirable"',
         C: 'C: "Definitely Declining"',
         D: 'D: "Hazardous"',
-        Commercial: "Commercial/Industrial"
+        Commercial: "Commercial/Industrial",
       },
       colors: {
         A: "#25a630",
         B: "#295bb7",
         C: "#ccac00",
         D: "#cf0000",
-        Commercial: "#444444"
-      }
+        Commercial: "#444444",
+      },
     };
   },
   mounted() {
@@ -116,7 +129,7 @@ export default {
             "https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/City_Limits/FeatureServer/0",
           style: () => {
             return { fill: false, color: "#cfcfcf", weight: 4 };
-          }
+          },
         })
         .addTo(map);
 
@@ -126,14 +139,14 @@ export default {
           pane: "choropleth",
           url:
             "https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/Disadvantage_Index/FeatureServer/0",
-          style: feature => {
+          style: (feature) => {
             return {
               fillColor: feature.properties.color,
               weight: 0,
               opacity: 1,
-              fillOpacity: 0.5
+              fillOpacity: 0.5,
             };
-          }
+          },
         })
         .addTo(map);
 
@@ -145,7 +158,6 @@ export default {
           "https://services.arcgis.com/fLeGjb7u4uXqeF9q/arcgis/rest/services/1937_HOLC_Map_for_Philadelphia/FeatureServer/0",
         style: this.getDefaultStyle,
         pane: "redlining",
-        where: "holc_grade != 'Commercial'"
       });
 
       map.createPane("points");
@@ -155,14 +167,14 @@ export default {
       this.layers.homicides = esri.featureLayer({
         url: homicidesURL,
         minZoom: 10,
-        pointToLayer: function(geojson, latlng) {
+        pointToLayer: function (geojson, latlng) {
           return L.circleMarker(latlng, {
             color: "#cf0000",
             fillColor: "#cf0000",
             pane: "points",
-            radius: 3.5
+            radius: 3.5,
           });
-        }
+        },
       });
     });
   },
@@ -189,7 +201,7 @@ export default {
         fillColor: this.colors[feature.properties.holc_grade],
         opacity: 1,
         fillOpacity: 0,
-        weight: 3
+        weight: 3,
       };
     },
     getHighlightedStyle(feature) {
@@ -214,8 +226,8 @@ export default {
 
     zoomHome() {
       this.$refs.disadvantageBasemap.mapObject.flyToBounds(this.homeBounds);
-    }
-  }
+    },
+  },
 };
 </script>
 
